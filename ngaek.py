@@ -28,7 +28,6 @@ if __name__ == "__main__":
             while 1:
                 last_id = get_last_post("POST", "ID_LAST_POST")
                 post = api.wall.get(owner_id= -40400418, domain= 'https://vk.com/public40400418', count= 1, v= 5.103)['items'][0]
-                print(post)
                 if post['text'] == '':
                     if len(post['attachments']) == 1:
                         if int(last_id) != int(post['id']):
