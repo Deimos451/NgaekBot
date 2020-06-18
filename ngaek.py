@@ -35,7 +35,7 @@ if __name__ == "__main__":
                         image = open('./ngaek.jpg', 'rb')
                         bot.send_photo(chat_id= '@ngaek2', photo= image)
                         update_last_id("POST", "ID_LAST_POST", str(post['id']))
-            time.sleep(30)
+            time.sleep(60)
         except:
             print(traceback.format_exc())
             
