@@ -4,6 +4,7 @@ import urllib.request
 import time
 import psycopg2
 import traceback
+import os
 
 DATABASE_URL = os.environ['DATABASE_URL']
 connection = psycopg2.connect(DATABASE_URL, sslmode='require')
