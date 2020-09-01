@@ -39,7 +39,7 @@ if __name__ == "__main__":
                     post = api.wall.get(owner_id= -40400418, domain= 'https://vk.com/public40400418', count= 1, v= 5.103)['items'][0]
                     if post['text'] == '':
                         if len(post['attachments']) == 1:
-                            if int(last_id) != int(post['id']):
+                            if int(last_id) > int(post['id']):
                                 img_url = post['attachments'][-1]['photo']['sizes'][-1]['url']
                                 urllib.request.urlretrieve(img_url, './ngaek.jpg') 
                                 image = open('./ngaek.jpg', 'rb')
