@@ -37,7 +37,6 @@ if __name__ == "__main__":
                 try:
                     last_id = get_last_post()
                     post = api.wall.get(owner_id= -40400418, domain= 'https://vk.com/public40400418', count= 1, v= 5.103)['items'][0]
-                    update_last_id(post['id'])
                     if post['text'] == '':
                         if len(post['attachments']) == 1:
                             if int(last_id) != int(post['id']):
@@ -45,6 +44,7 @@ if __name__ == "__main__":
                                 urllib.request.urlretrieve(img_url, './ngaek.jpg') 
                                 image = open('./ngaek.jpg', 'rb')
                                 bot.send_photo(chat_id= '@ngaek2', photo= image)
+                                update_last_id(post['id'])
                     time.sleep(60)
                 except:
                     print(traceback.format_exc())
