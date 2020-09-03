@@ -1,7 +1,7 @@
 import vk
 import telebot
 import urllib.request
-import time
+import time, datetime
 import psycopg2
 import traceback
 import os
@@ -14,16 +14,16 @@ connection = psycopg2.connect(DATABASE_URL, sslmode='require')
                                 user=       'qkiuqhynexpjrm', 
                                 password=   '9967fb4461bc54df58673a08020f2fe5234f897159dbb0234a12380b1f5c382b', 
                                 port=       '5432') '''
+    
 
-
-def update_last_id(value):
+def update_last_unix(value):
     cursor = connection.cursor()
-    cursor.execute("UPDATE post_id SET last_post = (%s)", [value])
+    cursor.execute("UPDATE post_id SET last_post_unix = (%s)", [value])
     connection.commit()
 
-def get_last_post():
+def get_last_post_unix():
     cursor = connection.cursor()
-    cursor.execute("SELECT last_post FROM post_id LIMIT 1")
+    cursor.execute("SELECT last_post_unix FROM post_id LIMIT 1")
     last_id = cursor.fetchall()[0][0]
     return last_id
 
@@ -35,16 +35,14 @@ if __name__ == "__main__":
             api = vk.API(vk.Session('51f237fc51f237fc51f237fc97518049f2551f251f237fc0f2fe2db99886533b296dba1'))
             while 1:
                 try:
-                    last_id = get_last_post()
+                    last_id = get_last_post_unix()
                     post = api.wall.get(owner_id= -40400418, domain= 'https://vk.com/public40400418', count= 1, v= 5.103)['items'][0]
-                    if post['text'] == '':
-                        if len(post['attachments']) == 1:
-                            if int(last_id) > int(post['id']):
-                                img_url = post['attachments'][-1]['photo']['sizes'][-1]['url']
-                                urllib.request.urlretrieve(img_url, './ngaek.jpg') 
-                                image = open('./ngaek.jpg', 'rb')
-                                bot.send_photo(chat_id= '@ngaek2', photo= image)
-                                update_last_id(post['id'])
+                    if (post['date'] > last_post_unix()) and ((post['text'] == '') or ('UPD' in post['text'])) and (len(post['attachments']) == 1):
+                        img_url = post['attachments'][-1]['photo']['sizes'][-1]['url']
+                        urllib.request.urlretrieve(img_url, './ngaek.jpg') 
+                        image = open('./ngaek.jpg', 'rb')
+                        bot.send_photo(chat_id= '@ngaek2', photo= image)
+                        update_last_id(post['date'])
                     time.sleep(60)
                 except:
                     print(traceback.format_exc())
