@@ -16,7 +16,7 @@ connection = psycopg2.connect(DATABASE_URL, sslmode='require')
                                 port=       '5432') '''
     
 
-def update_last_unix(value):
+def update_last_post_unix(value):
     cursor = connection.cursor()
     cursor.execute("UPDATE post_id SET last_post_unix = (%s)", [value])
     connection.commit()
@@ -42,7 +42,7 @@ if __name__ == "__main__":
                         urllib.request.urlretrieve(img_url, './ngaek.jpg') 
                         image = open('./ngaek.jpg', 'rb')
                         bot.send_photo(chat_id= '@ngaek2', photo= image)
-                        update_last_id(post['date'])
+                        update_last_post_unix(post['date'])
                     time.sleep(60)
                 except:
                     print(traceback.format_exc())
