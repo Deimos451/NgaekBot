@@ -7,19 +7,17 @@ import traceback
 import os
 
 DATABASE_URL = os.environ['DATABASE_URL']
+TELEBOT_TOKEN = os.environ['TELEBOT_TOKEN']
+VK_TOKEN = os.environ['VK_TOKEN']
+
 connection = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-''' connection = psycopg2.connect(  dbname=     'de02gtvjqfnkg8', 
-                                host=       'ec2-52-208-175-161.eu-west-1.compute.amazonaws.com',
-                                user=       'qkiuqhynexpjrm', 
-                                password=   '9967fb4461bc54df58673a08020f2fe5234f897159dbb0234a12380b1f5c382b', 
-                                port=       '5432') '''
-    
 
 def update_last_post_unix(value):
     cursor = connection.cursor()
     cursor.execute("UPDATE post_id SET last_post_unix = (%s)", [value])
     connection.commit()
+
 
 def get_last_post_unix():
     cursor = connection.cursor()
@@ -31,8 +29,8 @@ def get_last_post_unix():
 if __name__ == "__main__":
     while 1:
         try:
-            bot = telebot.TeleBot('1175875986:AAHLQgN7qPfiJShormK-bhScNnbrdSvwMvo')
-            api = vk.API(vk.Session('51f237fc51f237fc51f237fc97518049f2551f251f237fc0f2fe2db99886533b296dba1'))
+            bot = telebot.TeleBot(TELEBOT_TOKEN)
+            api = vk.API(vk.Session(VK_TOKEN))
             while 1:
                 try:
                     last_id = get_last_post_unix()
