@@ -46,5 +46,6 @@ if __name__ == "__main__":
                     print(traceback.format_exc())
                     time.sleep(120)
         except:
+            print(traceback.format_exc())
             time.sleep(15)
     
